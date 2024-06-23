@@ -1,26 +1,23 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Stock Management</title>
+  <title>Clothing Store</title>
   <style>
-    body {
-      background: linear-gradient(to bottom right, black, pink);
-      background-size: cover;
-      background-repeat: no-repeat;
-      background-position: center;
-      text-align: center;
-      color: #333;
-      font-family: Arial, sans-serif;
-    }
-
     #logo {
       display: block;
       margin: 0 auto;
       width: 150px;
       height: auto;
     }
-    h1 {
-      background-color: rgba(255, 255, 255, 0.8);
+    .product-image {
+      width: 100px;
+      height: auto;
+    }
+    .price {
+      font-weight: bold;
+    }
+    h1, h2 {
+      background-color: rgba(255, 192, 203, 0.8);
       display: inline-block;
       padding: 10px;
       border-radius: 10px;
@@ -38,17 +35,7 @@
       width: 300px;
       text-align: left;
     }
-    .product-image {
-      width: 100px;
-      height: auto;
-    }
-    .price {
-      font-weight: bold;
-    }
-    input[type="number"] {
-      width: 50px;
-    }
-    .update-button {
+    .category-button {
       display: inline-block;
       margin: 10px;
       padding: 10px 20px;
@@ -58,157 +45,281 @@
       border-radius: 5px;
       cursor: pointer;
     }
-    .update-button:hover {
+    .category-button:hover {
       background-color: white;
     }
+    .product-category {
+      display: none;
+    }
+  
+    #receipt {
+      background-color: white;
+      padding: 20px;
+      margin-top: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    body {
+      background: linear-gradient(to bottom right, black, pink);
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      text-align: center;
+      color: #333;
+      font-family: Arial, sans-serif;
+    }
+    
+
   </style>
 </head>
 <body>
   <img id="logo" src="logo.jpg" alt="Logo">
-  <h1>Stock Management</h1>
-  <button class="update-button" onclick="location.href='store-page.html'">Go Back to Main Page</button>
+  <h1>JenZel's Collection</h1>
 
-  <ul id="stock-list">
+  <!-- Customer type selection -->
+  <select id="customerTypeSelect" onchange="applyDiscounts()">
+    <option value="regular">Regular</option>
+    <option value="student">Student</option>
+    <option value="PWD">PWD</option>
+    <option value="senior">Senior</option>
+  </select>
+
+  <!-- Buttons to show product categories -->
+  <h2>Categories:</h2>
+  <button class="category-button" onclick="showCategory('Jeans')">Jeans</button>
+  <button class="category-button" onclick="showCategory('T-Shirts')">T-Shirts</button>
+  <button class="category-button" onclick="showCategory('Sleeveless')">Sleeveless</button>
+  <button class="category-button" onclick="showCategory('Perfumes')">Perfumes</button>
+  <button class="category-button" onclick="showCategory('Toys')">Toys</button>
+  <button class="category-button" onclick="showAllCategories()">All Products</button>
+  <button class="category-button" onclick="location.href='stock.html'">Manage Stocks</button>
+  
+  <!-- Product categories -->
+  <ul id="Jeans" class="product-category">
+    <!-- Example products -->
     <li>
       <img class="product-image" src="long.jpeg" alt="Product: Long Jeans">
-      Long Jeans: <span class="price">500</span>
-      Current Stock: <span id="long_JeansStock">50</span>
-      <input type="number" id="long_JeansNewStock" min="0" value="">
-      <button class="update-button" onclick="updateStock('long_Jeans')">Update Stock</button>
+      Long Jeans: <span class="price" id="long_JeansPrice">500</span>, Stock: <span id="long_JeansStock">50</span>
+      <input type="number" id="long_JeansQuantity" min="1" value="">
+      <button onclick="addToCart('long_Jeans')">Add to Cart</button>
     </li>
     <li>
       <img class="product-image" src="short.jpeg" alt="Product: Short Jeans">
-      Short Jeans: <span class="price">250</span>
-      Current Stock: <span id="short_JeansStock">50</span>
-      <input type="number" id="short_JeansNewStock" min="0" value="">
-      <button class="update-button" onclick="updateStock('short_Jeans')">Update Stock</button>
+      Short Jeans: <span class="price" id="short_JeansPrice">250</span>, Stock: <span id="short_JeansStock">50</span>
+      <input type="number" id="short_JeansQuantity" min="1" value="">
+      <button onclick="addToCart('short_Jeans')">Add to Cart</button>
     </li>
     <li>
       <img class="product-image" src="vest.jpeg" alt="Product: Vest">
-      Vest: <span class="price">300</span>
-      Current Stock: <span id="vestStock">50</span>
-      <input type="number" id="vestNewStock" min="0" value="">
-      <button class="update-button" onclick="updateStock('vest')">Update Stock</button>
+      Vest: <span class="price" id="vestPrice">300</span>, Stock: <span id="vestStock">50</span>
+      <input type="number" id="vestQuantity" min="1" value="">
+      <button onclick="addToCart('vest')">Add to Cart</button>
     </li>
     <li>
       <img class="product-image" src="jack.jpeg" alt="Product: Jacket">
-      Jacket: <span class="price">350</span>
-      Current Stock: <span id="jacketStock">50</span>
-      <input type="number" id="jacketNewStock" min="0" value="">
-      <button class="update-button" onclick="updateStock('jacket')">Update Stock</button>
-    </li>
-    <li>
-     
-      <img class="product-image" src="fit.jpeg" alt="Product: Fitted Shirt">
-      Fitted Shirt: <span class="price">200</span>
-      Current Stock: <span id="fitted_ShirtStock">50</span>
-      <input type="number" id="fitted_ShirtNewStock" min="0" value="">
-      <button class="update-button" onclick="updateStock('fitted_Shirt')">Update Stock</button>
-    </li>
-    <li>
-      <img class="product-image" src="crop.jpeg" alt="Product: Cropped Shirt">
-      Cropped Shirt: <span class="price">230</span>
-      Current Stock: <span id="cropped_ShirtStock">50</span>
-      <input type="number" id="cropped_ShirtNewStock" min="0" value="">
-      <button class="update-button" onclick="updateStock('cropped_Shirt')">Update Stock</button>
-    </li>
-    <li>
-      <img class="product-image" src="vneck.jpeg" alt="Product: V-Neck Shirt">
-      V-Neck Shirt: <span class="price">320</span>
-      Current Stock: <span id="vNeck_ShirtStock">50</span>
-      <input type="number" id="vNeck_ShirtNewStock" min="0" value="">
-      <button class="update-button" onclick="updateStock('vNeck_Shirt')">Update Stock</button>
-    </li>
-    <li>
-      <img class="product-image" src="loose.jpeg" alt="Product: Loose Shirt">
-      Loose Shirt: <span class="price">400</span>
-      Current Stock: <span id="loose_ShirtStock">50</span>
-      <input type="number" id="loose_ShirtNewStock" min="0" value="">
-      <button class="update-button" onclick="updateStock('loose_Shirt')">Update Stock</button>
-    </li>
-    <li>
-      <img class="product-image" src="s1.jpeg" alt="Product: Sleeveless 1">
-      Sleeveless 1: <span class="price">90</span>
-      Current Stock: <span id="short_Sleeve_1Stock">50</span>
-      <input type="number" id="short_Sleeve_1NewStock" min="0" value="">
-      <button class="update-button" onclick="updateStock('short_Sleeve_1')">Update Stock</button>
-    </li>
-    <li>
-      <img class="product-image" src="s2.jpeg" alt="Product: Sleeveless 2">
-      Sleeveless 2: <span class="price">100</span>
-      Current Stock: <span id="short_Sleeve_2Stock">50</span>
-      <input type="number" id="short_Sleeve_2NewStock" min="0" value="">
-      <button class="update-button" onclick="updateStock('short_Sleeve_2')">Update Stock</button>
-    </li>
-    <li>
-      <img class="product-image" src="s3.jpeg" alt="Product: Sleeveless 3">
-      Sleeveless 3: <span class="price">100</span>
-      Current Stock: <span id="short_Sleeve_3Stock">50</span>
-      <input type="number" id="short_Sleeve_3NewStock" min="0" value="">
-      <button class="update-button" onclick="updateStock('short_Sleeve_3')">Update Stock</button>
-    </li>
-    <li>
-      <img class="product-image" src="s4.jpeg" alt="Product: Sleeveless 4">
-      Sleeveless 4: <span class="price">90</span>
-      Current Stock: <span id="short_Sleeve_4Stock">50</span>
-      <input type="number" id="short_Sleeve_4NewStock" min="0" value="">
-      <button class="update-button" onclick="updateStock('short_Sleeve_4')">Update Stock</button>
-    </li>
-    <li>
-      <img class="product-image" src="perfume1.jpeg" alt="Product: Perfume 1">
-      Perfume 1: <span class="price">500</span>
-      Current Stock: <span id="perfume_1Stock">50</span>
-      <input type="number" id="perfume_1NewStock" min="0" value="">
-      <button class="update-button" onclick="updateStock('perfume_1')">Update Stock</button>
-    </li>
-    <li>
-      <img class="product-image" src="perfume2.jpeg" alt="Product: Perfume 2">
-      Perfume 2: <span class="price">550</span>
-      Current Stock: <span id="perfume_2Stock">50</span>
-      <input type="number" id="perfume_2NewStock" min="0" value="">
-      <button class="update-button" onclick="updateStock('perfume_2')">Update Stock</button>
-    </li>
-    <li>
-      <img class="product-image" src="perfume3.jpeg" alt="Product: Perfume 3">
-      Perfume 3: <span class="price">600</span>
-      Current Stock: <span id="perfume_3Stock">50</span>
-      <input type="number" id="perfume_3NewStock" min="0" value="">
-      <button class="update-button" onclick="updateStock('perfume_3')">Update Stock</button>
-    </li>
-    <li>
-      <img class="product-image" src="toy1.jpeg" alt="Product: Toy 1">
-      Toy 1: <span class="price">150</span>
-      Current Stock: <span id="toy_1Stock">50</span>
-      <input type="number" id="toy_1NewStock" min="0" value="">
-      <button class="update-button" onclick="updateStock('toy_1')">Update Stock</button>
-    </li>
-    <li>
-      <img class="product-image" src="toy2.jpeg" alt="Product: Toy 2">
-      Toy 2: <span class="price">200</span>
-      Current Stock: <span id="toy_2Stock">50</span>
-      <input type="number" id="toy_2NewStock" min="0" value="">
-      <button class="update-button" onclick="updateStock('toy_2')">Update Stock</button>
-    </li>
-    <li>
-      <img class="product-image" src="toy3.jpeg" alt="Product: Toy 3">
-      Toy 3: <span class="price">250</span>
-      Current Stock: <span id="toy_3Stock">50</span>
-      <input type="number" id="toy_3NewStock" min="0" value="">
-      <button class="update-button" onclick="updateStock('toy_3')">Update Stock</button>
+      Jacket: <span class="price" id="jacketPrice">350</span>, Stock: <span id="jacketStock">50</span>
+      <input type="number" id="jacketQuantity" min="1" value="">
+      <button onclick="addToCart('jacket')">Add to Cart</button>
     </li>
   </ul>
 
+  <ul id="T-Shirts" class="product-category">
+    <!-- Example products -->
+    <li>
+      <img class="product-image" src="fit.jpeg" alt="Product: Fitted Shirt">
+      Fitted Shirt: <span class="price" id="fitted_ShirtPrice">200</span>, Stock: <span id="fitted_ShirtStock">50</span>
+      <input type="number" id="fitted_ShirtQuantity" min="1" value="">
+      <button onclick="addToCart('fitted_Shirt')">Add to Cart</button>
+    </li>
+    <li>
+      <img class="product-image" src="crop.jpeg" alt="Product: Cropped Shirt">
+      Cropped Shirt: <span class="price" id="cropped_ShirtPrice">230</span>, Stock: <span id="cropped_ShirtStock">50</span>
+      <input type="number" id="cropped_ShirtQuantity" min="1" value="">
+      <button onclick="addToCart('cropped_Shirt')">Add to Cart</button>
+    </li>
+    <li>
+      <img class="product-image" src="vneck.jpeg" alt="Product: V-Neck Shirt">
+      V-Neck Shirt: <span class="price" id="vNeck_ShirtPrice">320</span>, Stock: <span id="vNeck_ShirtStock">50</span>
+      <input type="number" id="vNeck_ShirtQuantity" min="1" value="">
+      <button onclick="addToCart('vNeck_Shirt')">Add to Cart</button>
+    </li>
+    <li>
+      <img class="product-image" src="loose.jpeg" alt="Product: Loose Shirt">
+      Loose Shirt: <span class="price" id="loose_ShirtPrice">400</span>, Stock: <span id="loose_ShirtStock">50</span>
+      <input type="number" id="loose_ShirtQuantity" min="1" value="">
+      <button onclick="addToCart('loose_Shirt')">Add to Cart</button>
+    </li>
+  </ul>
+
+  <ul id="Sleeveless" class="product-category">
+    <!-- Example products -->
+    <li>
+      <img class="product-image" src="s1.jpeg" alt="Product: Sleeveless 1">
+      Sleeveless 1: <span class="price" id="short_Sleeve_1Price">90</span>, Stock: <span id="short_Sleeve_1Stock">50</span>
+      <input type="number" id="short_Sleeve_1Quantity" min="1" value="">
+      <button onclick="addToCart('short_Sleeve_1')">Add to Cart</button>
+    </li>
+    <li>
+      <img class="product-image" src="s2.jpeg" alt="Product: Sleeveless 2">
+      Sleeveless 2: <span class="price" id="short_Sleeve_2Price">100</span>, Stock: <span id="short_Sleeve_2Stock">50</span>
+      <input type="number" id="short_Sleeve_2Quantity" min="1" value="">
+      <button onclick="addToCart('short_Sleeve_2')">Add to Cart</button>
+    </li>
+    <li>
+      <img class="product-image" src="s3.jpeg" alt="Product: Sleeveless 3">
+      Sleeveless 3: <span class="price" id="short_Sleeve_3Price">100</span>, Stock: <span id="short_Sleeve_3Stock">50</span>
+      <input type="number" id="short_Sleeve_3Quantity" min="1" value="">
+      <button onclick="addToCart('short_Sleeve_3')">Add to Cart</button>
+    </li>
+    <li>
+      <img class="product-image" src="s4.jpeg" alt="Product: Sleeveless 4">
+      less 4: <span class="price" id="short_Sleeve_4Price">90</span>, Stock: <span id="short_Sleeve_4Stock">50</span>
+      <input type="number" id="short_Sleeve_4Quantity" min="1" value="">
+      <button onclick="addToCart('short_Sleeve_4')">Add to Cart</button>
+    </li>
+  </ul>
+
+  <ul id="Perfumes" class="product-category">
+    <!-- Example products -->
+    <li>
+      <img class="product-image" src="perfume1.jpeg" alt="Product: Perfume 1">
+      Perfume 1: <span class="price" id="perfume_1Price">500</span>, Stock: <span id="perfume_1Stock">50</span>
+      <input type="number" id="perfume_1Quantity" min="1" value="">
+      <button onclick="addToCart('perfume_1')">Add to Cart</button>
+    </li>
+    <li>
+      <img class="product-image" src="perfume2.jpeg" alt="Product: Perfume 2">
+      Perfume 2: <span class="price" id="perfume_2Price">550</span>, Stock: <span id="perfume_2Stock">50</span>
+      <input type="number" id="perfume_2Quantity" min="1" value="">
+      <button onclick="addToCart('perfume_2')">Add to Cart</button>
+    </li>
+    <li>
+      <img class="product-image" src="perfume3.jpeg" alt="Product: Perfume 3">
+      Perfume 3: <span class="price" id="perfume_3Price">600</span>, Stock: <span id="perfume_3Stock">50</span>
+      <input type="number" id="perfume_3Quantity" min="1" value="">
+      <button onclick="addToCart('perfume_3')">Add to Cart</button>
+    </li>
+  </ul>
+
+  <ul id="Toys" class="product-category">
+    <!-- Example products -->
+    <li>
+      <img class="product-image" src="toy1.jpeg" alt="Product: Toy 1">
+      Toy 1: <span class="price" id="toy_1Price">150</span>, Stock: <span id="toy_1Stock">50</span>
+      <input type="number" id="toy_1Quantity" min="1" value="">
+      <button onclick="addToCart('toy_1')">Add to Cart</button>
+    </li>
+    <li>
+      <img class="product-image" src="toy2.jpeg" alt="Product: Toy 2">
+      Toy 2: <span class="price" id="toy_2Price">200</span>, Stock: <span id="toy_2Stock">50</span>
+      <input type="number" id="toy_2Quantity" min="1" value="">
+      <button onclick="addToCart('toy_2')">Add to Cart</button>
+    </li>
+    <li>
+      <img class="product-image" src="toy3.jpeg" alt="Product: Toy 3">
+      Toy 3: <span class="price" id="toy_3Price">250</span>, Stock: <span id="toy_3Stock">50</span>
+      <input type="number" id="toy_3Quantity" min="1" value="">
+      <button onclick="addToCart('toy_3')">Add to Cart</button>
+    </li>
+  </ul>
+
+  <!-- Receipt display -->
+  <div id="receipt"></div>
+
   <script>
-    function updateStock(productId) {
-      var newStock = document.getElementById(productId + 'NewStock').value;
-      if (newStock && newStock >= 0) {
-        document.getElementById(productId + 'Stock').innerText = newStock;
-        alert('Stock updated!');
-      } else {
-        alert('Invalid stock value.');
+    var cart = {};
+    var customerType = 'regular';
+
+    function showCategory(category) {
+      var categories = document.getElementsByClassName('product-category');
+      for (var i = 0; i < categories.length; i++) {
+        categories[i].style.display = 'none';
+      }
+      document.getElementById(category).style.display = 'block';
+    }
+    
+
+    function showAllCategories() {
+      var categories = document.getElementsByClassName('product-category');
+      for (var i = 0; i < categories.length; i++) {
+        categories[i].style.display = 'block';
       }
     }
+
+    function addToCart(productId) {
+      var quantity = document.getElementById(productId + 'Quantity').value;
+      var price = document.getElementById(productId + 'Price').innerText;
+      var stock = document.getElementById(productId + 'Stock');
+      if (quantity && quantity > 0 && quantity <= parseInt(stock.innerText)) {
+        stock.innerText -= quantity;
+        cart[productId] = (cart[productId] || 0) + parseInt(quantity);
+        alert('Added to cart!');
+        generateReceipt();
+      } else {
+        alert('Invalid quantity or out of stock.');
+      }
+    }
+
+    function applyDiscounts() {
+      var select = document.getElementById("customerTypeSelect");
+      customerType = select.value;
+      generateReceipt();
+    }
+
+    function generateReceipt() {
+      var receiptDiv = document.getElementById('receipt');
+      receiptDiv.innerHTML = '<h2>Receipt:</h2>';
+      var total = 0;
+      for (var productId in cart) {
+        var price = document.getElementById(productId + 'Price').innerText;
+        var quantity = cart[productId];
+        var cost = price * quantity;
+
+        // Apply discounts based on customer type
+        if (customerType === 'student') {
+          cost *= 0.9; // 10% discount for students
+        } else if (customerType === 'PWD') {
+          cost *= 0.7; // 30% discount for PWD
+        } else if (customerType === 'senior') {
+          cost *= 0.8; // 20% discount for seniors
+        }
+        
+        total += cost;
+        receiptDiv.innerHTML += productId + ': ' + quantity + ' x ' + price + ' = ' + cost.toFixed(2) + '<br>';
+      }
+      receiptDiv.innerHTML += '<br>Total: ' + total.toFixed(2);
+
+      // Add button to show discounted price
+      receiptDiv.innerHTML += '<br><button onclick="showDiscountedPrice()">Show Discounted Price</button>';
+    }
+
+    function showDiscountedPrice() {
+      var receiptDiv = document.getElementById('receipt');
+      var total = 0;
+      for (var productId in cart) {
+        var price = document.getElementById(productId + 'Price').innerText;
+        var quantity = cart[productId];
+        var cost = price * quantity;
+
+        // Apply discounts based on customer type
+        if (customerType === 'student') {
+          cost *= 0.9; // 10% discount for students
+        } else if (customerType === 'PWD') {
+          cost *= 0.7; // 30% discount for PWD
+        } else if (customerType === 'senior') {
+          cost *= 0.8; // 20% discount for seniors
+        }
+
+        total += cost;
+      }
+      receiptDiv.innerHTML = '<h2>Discounted Price:</h2>';
+      receiptDiv.innerHTML += '<br>Total after discount: ' + total.toFixed(2);
+    }
+    
+
   </script>
 </body>
 </html>
+
 <ALOASK-SEPARATE-EDITORS><ALOASK-SEPARATE-EDITORS>
