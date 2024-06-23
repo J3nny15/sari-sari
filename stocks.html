@@ -1,325 +1,178 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Clothing Store</title>
+  <title>Stock Management</title>
   <style>
-    #logo {
-      display: block;
-      margin: 0 auto;
-      width: 150px;
-      height: auto;
+    body {
+      background: linear-gradient(to right, black, pink);
+      text-align: center;
+      color: #333;
+      font-family: Arial, sans-serif;
+      padding: 20px;
     }
-    .product-image {
-      width: 100px;
-      height: auto;
-    }
-    .price {
-      font-weight: bold;
-    }
-    h1, h2 {
-      background-color: rgba(255, 192, 203, 0.8);
-      display: inline-block;
-      padding: 10px;
-      border-radius: 10px;
-    }
-    ul {
-      list-style: none;
-      padding: 0;
-    }
-    li {
+    h1 {
       background-color: rgba(255, 255, 255, 0.8);
-      margin: 10px;
+      display: inline-block;
       padding: 10px;
       border-radius: 10px;
-      display: inline-block;
-      width: 300px;
-      text-align: left;
     }
-    .category-button {
-      display: inline-block;
+    .stock-form {
+      background-color: white;
+      padding: 20px;
+      margin: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .stock-form select, .stock-form input {
+      padding: 10px;
       margin: 10px;
+      width: 80%;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .stock-form button {
       padding: 10px 20px;
-      background-color: #FFC0CB;
+      background-color:#FFC0CB;
       color: black;
       border: none;
       border-radius: 5px;
       cursor: pointer;
     }
-    .category-button:hover {
+    .stock-form button:hover {
       background-color: white;
     }
-    .product-category {
-      display: none;
+    .back-button {
+      padding: 10px 20px;
+      background-color: #008CBA;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
     }
-  
-    #receipt {
-      background-color: white;
-      padding: 20px;
-      margin-top: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    .back-button:hover {
+      background-color: #007BB5;
     }
-    
-    body {
-      background: linear-gradient(to bottom right, black, pink);
-      background-size: cover;
-      background-repeat: no-repeat;
-      background-position: center;
-      text-align: center;
-      color: #333;
-      font-family: Arial, sans-serif;
-    }
-    
-
   </style>
 </head>
 <body>
-  <img id="logo" src="logo.jpg" alt="Logo">
-  <h1>JenZel's Collection</h1>
+  <h1>Manage Stock</h1>
 
-  <!-- Customer type selection -->
-  <select id="customerTypeSelect" onchange="applyDiscounts()">
-    <option value="regular">Regular</option>
-    <option value="student">Student</option>
-    <option value="PWD">PWD</option>
-    <option value="senior">Senior</option>
-  </select>
+  <div class="stock-form">
+    <h2>Add Stock</h2>
+    <select id="addProduct">
+      <!-- Dynamically generated options based on products -->
+    </select>
+    <input type="number" id="addQuantity" placeholder="Quantity">
+    <button onclick="addStock()">Add Stock</button>
+  </div>
 
-  <!-- Buttons to show product categories -->
-  <h2>Categories:</h2>
-  <button class="category-button" onclick="showCategory('Jeans')">Jeans</button>
-  <button class="category-button" onclick="showCategory('T-Shirts')">T-Shirts</button>
-  <button class="category-button" onclick="showCategory('Sleeveless')">Sleeveless</button>
-  <button class="category-button" onclick="showCategory('Perfumes')">Perfumes</button>
-  <button class="category-button" onclick="showCategory('Toys')">Toys</button>
-  <button class="category-button" onclick="showAllCategories()">All Products</button>
-  <button class="category-button" onclick="location.href='stock.html'">Manage Stocks</button>
-  
-  <!-- Product categories -->
-  <ul id="Jeans" class="product-category">
-    <!-- Example products -->
-    <li>
-      <img class="product-image" src="long.jpeg" alt="Product: Long Jeans">
-      Long Jeans: <span class="price" id="long_JeansPrice">500</span>, Stock: <span id="long_JeansStock">50</span>
-      <input type="number" id="long_JeansQuantity" min="1" value="">
-      <button onclick="addToCart('long_Jeans')">Add to Cart</button>
-    </li>
-    <li>
-      <img class="product-image" src="short.jpeg" alt="Product: Short Jeans">
-      Short Jeans: <span class="price" id="short_JeansPrice">250</span>, Stock: <span id="short_JeansStock">50</span>
-      <input type="number" id="short_JeansQuantity" min="1" value="">
-      <button onclick="addToCart('short_Jeans')">Add to Cart</button>
-    </li>
-    <li>
-      <img class="product-image" src="vest.jpeg" alt="Product: Vest">
-      Vest: <span class="price" id="vestPrice">300</span>, Stock: <span id="vestStock">50</span>
-      <input type="number" id="vestQuantity" min="1" value="">
-      <button onclick="addToCart('vest')">Add to Cart</button>
-    </li>
-    <li>
-      <img class="product-image" src="jack.jpeg" alt="Product: Jacket">
-      Jacket: <span class="price" id="jacketPrice">350</span>, Stock: <span id="jacketStock">50</span>
-      <input type="number" id="jacketQuantity" min="1" value="">
-      <button onclick="addToCart('jacket')">Add to Cart</button>
-    </li>
-  </ul>
+  <div class="stock-form">
+    <h2>Remove Stock</h2>
+    <select id="removeProduct">
+      <!-- Dynamically generated options based on products -->
+    </select>
+    <input type="number" id="removeQuantity" placeholder="Quantity">
+    <button onclick="removeStock()">Remove Stock</button>
+  </div>
 
-  <ul id="T-Shirts" class="product-category">
-    <!-- Example products -->
-    <li>
-      <img class="product-image" src="fit.jpeg" alt="Product: Fitted Shirt">
-      Fitted Shirt: <span class="price" id="fitted_ShirtPrice">200</span>, Stock: <span id="fitted_ShirtStock">50</span>
-      <input type="number" id="fitted_ShirtQuantity" min="1" value="">
-      <button onclick="addToCart('fitted_Shirt')">Add to Cart</button>
-    </li>
-    <li>
-      <img class="product-image" src="crop.jpeg" alt="Product: Cropped Shirt">
-      Cropped Shirt: <span class="price" id="cropped_ShirtPrice">230</span>, Stock: <span id="cropped_ShirtStock">50</span>
-      <input type="number" id="cropped_ShirtQuantity" min="1" value="">
-      <button onclick="addToCart('cropped_Shirt')">Add to Cart</button>
-    </li>
-    <li>
-      <img class="product-image" src="vneck.jpeg" alt="Product: V-Neck Shirt">
-      V-Neck Shirt: <span class="price" id="vNeck_ShirtPrice">320</span>, Stock: <span id="vNeck_ShirtStock">50</span>
-      <input type="number" id="vNeck_ShirtQuantity" min="1" value="">
-      <button onclick="addToCart('vNeck_Shirt')">Add to Cart</button>
-    </li>
-    <li>
-      <img class="product-image" src="loose.jpeg" alt="Product: Loose Shirt">
-      Loose Shirt: <span class="price" id="loose_ShirtPrice">400</span>, Stock: <span id="loose_ShirtStock">50</span>
-      <input type="number" id="loose_ShirtQuantity" min="1" value="">
-      <button onclick="addToCart('loose_Shirt')">Add to Cart</button>
-    </li>
-  </ul>
-
-  <ul id="Sleeveless" class="product-category">
-    <!-- Example products -->
-    <li>
-      <img class="product-image" src="s1.jpeg" alt="Product: Sleeveless 1">
-      Sleeveless 1: <span class="price" id="short_Sleeve_1Price">90</span>, Stock: <span id="short_Sleeve_1Stock">50</span>
-      <input type="number" id="short_Sleeve_1Quantity" min="1" value="">
-      <button onclick="addToCart('short_Sleeve_1')">Add to Cart</button>
-    </li>
-    <li>
-      <img class="product-image" src="s2.jpeg" alt="Product: Sleeveless 2">
-      Sleeveless 2: <span class="price" id="short_Sleeve_2Price">100</span>, Stock: <span id="short_Sleeve_2Stock">50</span>
-      <input type="number" id="short_Sleeve_2Quantity" min="1" value="">
-      <button onclick="addToCart('short_Sleeve_2')">Add to Cart</button>
-    </li>
-    <li>
-      <img class="product-image" src="s3.jpeg" alt="Product: Sleeveless 3">
-      Sleeveless 3: <span class="price" id="short_Sleeve_3Price">100</span>, Stock: <span id="short_Sleeve_3Stock">50</span>
-      <input type="number" id="short_Sleeve_3Quantity" min="1" value="">
-      <button onclick="addToCart('short_Sleeve_3')">Add to Cart</button>
-    </li>
-    <li>
-      <img class="product-image" src="s4.jpeg" alt="Product: Sleeveless 4">
-      less 4: <span class="price" id="short_Sleeve_4Price">90</span>, Stock: <span id="short_Sleeve_4Stock">50</span>
-      <input type="number" id="short_Sleeve_4Quantity" min="1" value="">
-      <button onclick="addToCart('short_Sleeve_4')">Add to Cart</button>
-    </li>
-  </ul>
-
-  <ul id="Perfumes" class="product-category">
-    <!-- Example products -->
-    <li>
-      <img class="product-image" src="perfume1.jpeg" alt="Product: Perfume 1">
-      Perfume 1: <span class="price" id="perfume_1Price">500</span>, Stock: <span id="perfume_1Stock">50</span>
-      <input type="number" id="perfume_1Quantity" min="1" value="">
-      <button onclick="addToCart('perfume_1')">Add to Cart</button>
-    </li>
-    <li>
-      <img class="product-image" src="perfume2.jpeg" alt="Product: Perfume 2">
-      Perfume 2: <span class="price" id="perfume_2Price">550</span>, Stock: <span id="perfume_2Stock">50</span>
-      <input type="number" id="perfume_2Quantity" min="1" value="">
-      <button onclick="addToCart('perfume_2')">Add to Cart</button>
-    </li>
-    <li>
-      <img class="product-image" src="perfume3.jpeg" alt="Product: Perfume 3">
-      Perfume 3: <span class="price" id="perfume_3Price">600</span>, Stock: <span id="perfume_3Stock">50</span>
-      <input type="number" id="perfume_3Quantity" min="1" value="">
-      <button onclick="addToCart('perfume_3')">Add to Cart</button>
-    </li>
-  </ul>
-
-  <ul id="Toys" class="product-category">
-    <!-- Example products -->
-    <li>
-      <img class="product-image" src="toy1.jpeg" alt="Product: Toy 1">
-      Toy 1: <span class="price" id="toy_1Price">150</span>, Stock: <span id="toy_1Stock">50</span>
-      <input type="number" id="toy_1Quantity" min="1" value="">
-      <button onclick="addToCart('toy_1')">Add to Cart</button>
-    </li>
-    <li>
-      <img class="product-image" src="toy2.jpeg" alt="Product: Toy 2">
-      Toy 2: <span class="price" id="toy_2Price">200</span>, Stock: <span id="toy_2Stock">50</span>
-      <input type="number" id="toy_2Quantity" min="1" value="">
-      <button onclick="addToCart('toy_2')">Add to Cart</button>
-    </li>
-    <li>
-      <img class="product-image" src="toy3.jpeg" alt="Product: Toy 3">
-      Toy 3: <span class="price" id="toy_3Price">250</span>, Stock: <span id="toy_3Stock">50</span>
-      <input type="number" id="toy_3Quantity" min="1" value="">
-      <button onclick="addToCart('toy_3')">Add to Cart</button>
-    </li>
-  </ul>
-
-  <!-- Receipt display -->
-  <div id="receipt"></div>
+  <button class="back-button" onclick="goBack()">Go Back to Main Page</button>
 
   <script>
-    var cart = {};
-    var customerType = 'regular';
+    // List of products with their IDs corresponding to the clothing store
+    var products = [
+      { id: 'long_Jeans', name: 'Long Jeans' },
+      { id: 'short_Jeans', name: 'Short Jeans' },
+      { id: 'vest', name: 'Vest' },
+      { id: 'jacket', name: 'Jacket' },
+      { id: 'fitted_Shirt', name: 'Fitted Shirt' },
+      { id: 'cropped_Shirt', name: 'Cropped Shirt' },
+      { id: 'vNeck_Shirt', name: 'V-Neck Shirt' },
+      { id: 'loose_Shirt', name: 'Loose Shirt' },
+      { id: 'short_Sleeve_1', name: 'Sleeveless 1' },
+      { id: 'short_Sleeve_2', name: 'Sleeveless 2' },
+      { id: 'short_Sleeve_3', name: 'Sleeveless 3' },
+      { id: 'short_Sleeve_4', name: 'Sleeveless 4' },
+      { id: 'strawberry_Perfume', name: 'Strawberry Perfume' },
+      { id: 'orange_Perfume', name: 'Orange Perfume' },
+      { id: 'lavender_Perfume', name: 'Lavender Perfume' },
+      { id: 'rose_Perfume', name: 'Rose Perfume' },
+      { id: 'toy_Car', name: 'Toy Car' },
+      { id: 'doll', name: 'Doll' },
+      { id: 'lego_Set', name: 'Lego Set' },
+      { id: 'puzzle', name: 'Puzzle' }
+    ];
 
-    function showCategory(category) {
-      var categories = document.getElementsByClassName('product-category');
-      for (var i = 0; i < categories.length; i++) {
-        categories[i].style.display = 'none';
+    // Function to populate the select options with product names
+    function populateDropdowns() {
+      var addSelect = document.getElementById('addProduct');
+      var removeSelect = document.getElementById('removeProduct');
+
+      products.forEach(function(product) {
+        var option = document.createElement('option');
+        option.value = product.id;
+        option.textContent = product.name;
+
+        addSelect.appendChild(option.cloneNode(true));
+        removeSelect.appendChild(option.cloneNode(true));
+      });
+    }
+
+    // Call function to populate dropdowns when the page loads
+    populateDropdowns();
+
+    function addStock() {
+      var product = document.getElementById('addProduct').value;
+      var quantity = parseInt(document.getElementById('addQuantity').value);
+
+      if (isNaN(quantity) || quantity <= 0) {
+        alert('Please enter a valid quantity.');
+        return;
       }
-      document.getElementById(category).style.display = 'block';
-    }
-    
 
-    function showAllCategories() {
-      var categories = document.getElementsByClassName('product-category');
-      for (var i = 0; i < categories.length; i++) {
-        categories[i].style.display = 'block';
+      var stockElement = document.getElementById(product + 'Stock');
+      if (!stockElement) {
+        alert('Product not found.');
+        return;
       }
+
+      var currentStock = parseInt(stockElement.textContent);
+      var newStock = currentStock + quantity;
+      stockElement.textContent = newStock;
+
+      alert('Stock updated successfully!');
     }
 
-    function addToCart(productId) {
-      var quantity = document.getElementById(productId + 'Quantity').value;
-      var price = document.getElementById(productId + 'Price').innerText;
-      var stock = document.getElementById(productId + 'Stock');
-      if (quantity && quantity > 0 && quantity <= parseInt(stock.innerText)) {
-        stock.innerText -= quantity;
-        cart[productId] = (cart[productId] || 0) + parseInt(quantity);
-        alert('Added to cart!');
-        generateReceipt();
-      } else {
-        alert('Invalid quantity or out of stock.');
+    function removeStock() {
+      var product = document.getElementById('removeProduct').value;
+      var quantity = parseInt(document.getElementById('removeQuantity').value);
+
+      if (isNaN(quantity) || quantity <= 0) {
+        alert('Please enter a valid quantity.');
+        return;
       }
-    }
 
-    function applyDiscounts() {
-      var select = document.getElementById("customerTypeSelect");
-      customerType = select.value;
-      generateReceipt();
-    }
-
-    function generateReceipt() {
-      var receiptDiv = document.getElementById('receipt');
-      receiptDiv.innerHTML = '<h2>Receipt:</h2>';
-      var total = 0;
-      for (var productId in cart) {
-        var price = document.getElementById(productId + 'Price').innerText;
-        var quantity = cart[productId];
-        var cost = price * quantity;
-
-        // Apply discounts based on customer type
-        if (customerType === 'student') {
-          cost *= 0.9; // 10% discount for students
-        } else if (customerType === 'PWD') {
-          cost *= 0.7; // 30% discount for PWD
-        } else if (customerType === 'senior') {
-          cost *= 0.8; // 20% discount for seniors
-        }
-        
-        total += cost;
-        receiptDiv.innerHTML += productId + ': ' + quantity + ' x ' + price + ' = ' + cost.toFixed(2) + '<br>';
+      var stockElement = document.getElementById(product + 'Stock');
+      if (!stockElement) {
+        alert('Product not found.');
+        return;
       }
-      receiptDiv.innerHTML += '<br>Total: ' + total.toFixed(2);
 
-      // Add button to show discounted price
-      receiptDiv.innerHTML += '<br><button onclick="showDiscountedPrice()">Show Discounted Price</button>';
-    }
-
-    function showDiscountedPrice() {
-      var receiptDiv = document.getElementById('receipt');
-      var total = 0;
-      for (var productId in cart) {
-        var price = document.getElementById(productId + 'Price').innerText;
-        var quantity = cart[productId];
-        var cost = price * quantity;
-
-        // Apply discounts based on customer type
-        if (customerType === 'student') {
-          cost *= 0.9; // 10% discount for students
-        } else if (customerType === 'PWD') {
-          cost *= 0.7; // 30% discount for PWD
-        } else if (customerType === 'senior') {
-          cost *= 0.8; // 20% discount for seniors
-        }
-
-        total += cost;
+      var currentStock = parseInt(stockElement.textContent);
+      if (quantity > currentStock) {
+        alert('Not enough stock to remove.');
+        return;
       }
-      receiptDiv.innerHTML = '<h2>Discounted Price:</h2>';
-      receiptDiv.innerHTML += '<br>Total after discount: ' + total.toFixed(2);
-    }
-    
 
+      var newStock = currentStock - quantity;
+      stockElement.textContent = newStock;
+
+      alert('Stock updated successfully!');
+    }
+
+    function goBack() {
+      window.location.href = 'index.html'; // replace with the actual URL of the main page
+    }
   </script>
 </body>
 </html>
-
-<ALOASK-SEPARATE-EDITORS><ALOASK-SEPARATE-EDITORS><ALOASK-SEPARATE-EDITORS><ALOASK-SEPARATE-EDITORS>
+<ALOASK-SEPARATE-EDITORS><ALOASK-SEPARATE-EDITORS>
