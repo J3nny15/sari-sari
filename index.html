@@ -17,7 +17,7 @@
       font-weight: bold;
     }
     h1, h2 {
-      background-color: rgba(255, 192, 203, 0.8); /* corrected h1 and h2 background color */
+      background-color: rgba(255, 192, 203, 0.8);
       display: inline-block;
       padding: 10px;
       border-radius: 10px;
@@ -60,24 +60,30 @@
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
     
-body {
-  background: linear-gradient(to bottom right, black, pink);
-  background-size: 100% 100%; /* Ensure full coverage */
-  background-repeat: no-repeat;
-  background-position: center;
-  text-align: center;
-  color: #333;
-  font-family: Arial, sans-serif;
-  margin: 0; /* Reset default body margin */
-  height: 100vh; /* Ensure full viewport height coverage */
-}
-
+    body {
+      background: linear-gradient(to bottom right, black, pink);
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      text-align: center;
+      color: #333;
+      font-family: Arial, sans-serif;
+    }
   </style>
 </head>
 <body>
   <img id="logo" src="logo.jpg" alt="Logo">
   <h1>JenZel's Collection</h1>
 
+  <!-- Customer type selection -->
+  <select id="customerTypeSelect" onchange="applyDiscounts()">
+    <option value="regular">Regular</option>
+    <option value="student">Student</option>
+    <option value="PWD">PWD</option>
+    <option value="senior">Senior</option>
+  </select>
+
+  <!-- Buttons to show product categories -->
   <h2>Categories:</h2>
   <button class="category-button" onclick="showCategory('Jeans')">Jeans</button>
   <button class="category-button" onclick="showCategory('T-Shirts')">T-Shirts</button>
@@ -87,7 +93,9 @@ body {
   <button class="category-button" onclick="showAllCategories()">All Products</button>
   <button class="category-button" onclick="location.href='stock-management.html'">Manage Stock</button>
   
+  <!-- Product categories -->
   <ul id="Jeans" class="product-category">
+    <!-- Example products -->
     <li>
       <img class="product-image" src="long.jpeg" alt="Product: Long Jeans">
       Long Jeans: <span class="price" id="long_JeansPrice">500</span>, Stock: <span id="long_JeansStock">50</span>
@@ -113,8 +121,9 @@ body {
       <button onclick="addToCart('jacket')">Add to Cart</button>
     </li>
   </ul>
-  
+
   <ul id="T-Shirts" class="product-category">
+    <!-- Example products -->
     <li>
       <img class="product-image" src="fit.jpeg" alt="Product: Fitted Shirt">
       Fitted Shirt: <span class="price" id="fitted_ShirtPrice">200</span>, Stock: <span id="fitted_ShirtStock">50</span>
@@ -140,8 +149,9 @@ body {
       <button onclick="addToCart('loose_Shirt')">Add to Cart</button>
     </li>
   </ul>
-  
+
   <ul id="Sleeveless" class="product-category">
+    <!-- Example products -->
     <li>
       <img class="product-image" src="s1.jpeg" alt="Product: Sleeveless 1">
       Sleeveless 1: <span class="price" id="short_Sleeve_1Price">90</span>, Stock: <span id="short_Sleeve_1Stock">50</span>
@@ -162,13 +172,14 @@ body {
     </li>
     <li>
       <img class="product-image" src="s4.jpeg" alt="Product: Sleeveless 4">
-      Sleeveless 4: <span class="price" id="short_Sleeve_4Price">90</span>, Stock: <span id="short_Sleeve_4Stock">50</span>
+      less 4: <span class="price" id="short_Sleeve_4Price">90</span>, Stock: <span id="short_Sleeve_4Stock">50</span>
       <input type="number" id="short_Sleeve_4Quantity" min="1" value="">
       <button onclick="addToCart('short_Sleeve_4')">Add to Cart</button>
     </li>
   </ul>
-  
+
   <ul id="Perfumes" class="product-category">
+    <!-- Example products -->
     <li>
       <img class="product-image" src="perfume1.jpeg" alt="Product: Perfume 1">
       Perfume 1: <span class="price" id="perfume_1Price">500</span>, Stock: <span id="perfume_1Stock">50</span>
@@ -188,8 +199,9 @@ body {
       <button onclick="addToCart('perfume_3')">Add to Cart</button>
     </li>
   </ul>
-  
+
   <ul id="Toys" class="product-category">
+    <!-- Example products -->
     <li>
       <img class="product-image" src="toy1.jpeg" alt="Product: Toy 1">
       Toy 1: <span class="price" id="toy_1Price">150</span>, Stock: <span id="toy_1Stock">50</span>
@@ -209,11 +221,13 @@ body {
       <button onclick="addToCart('toy_3')">Add to Cart</button>
     </li>
   </ul>
-  
+
+  <!-- Receipt display -->
   <div id="receipt"></div>
 
   <script>
     var cart = {};
+    var customerType = 'regular';
 
     function showCategory(category) {
       var categories = document.getElementsByClassName('product-category');
@@ -244,6 +258,12 @@ body {
       }
     }
 
+    function applyDiscounts() {
+      var select = document.getElementById("customerTypeSelect");
+      customerType = select.value;
+      generateReceipt();
+    }
+
     function generateReceipt() {
       var receiptDiv = document.getElementById('receipt');
       receiptDiv.innerHTML = '<h2>Receipt:</h2>';
@@ -252,14 +272,51 @@ body {
         var price = document.getElementById(productId + 'Price').innerText;
         var quantity = cart[productId];
         var cost = price * quantity;
+
+        // Apply discounts based on customer type
+        if (customerType === 'student') {
+          cost *= 0.9; // 10% discount for students
+        } else if (customerType === 'PWD') {
+          cost *= 0.7; // 30% discount for PWD
+        } else if (customerType === 'senior') {
+          cost *= 0.8; // 20% discount for seniors
+        }
+        
         total += cost;
-        receiptDiv.innerHTML += productId + ': ' + quantity + ' x ' + price + ' = ' + cost + '<br>';
+        receiptDiv.innerHTML += productId + ': ' + quantity + ' x ' + price + ' = ' + cost.toFixed(2) + '<br>';
       }
-      receiptDiv.innerHTML += '<br>Total: ' + total;
+      receiptDiv.innerHTML += '<br>Total: ' + total.toFixed(2);
+
+      // Add button to show discounted price
+      receiptDiv.innerHTML += '<br><button onclick="showDiscountedPrice()">Show Discounted Price</button>';
+    }
+
+    function showDiscountedPrice() {
+      var receiptDiv = document.getElementById('receipt');
+      var total = 0;
+      for (var productId in cart) {
+        var price = document.getElementById(productId + 'Price').innerText;
+        var quantity = cart[productId];
+        var cost = price * quantity;
+
+        // Apply discounts based on customer type
+        if (customerType === 'student') {
+          cost *= 0.9; // 10% discount for students
+        } else if (customerType === 'PWD') {
+          cost *= 0.7; // 30% discount for PWD
+        } else if (customerType === 'senior') {
+          cost *= 0.8; // 20% discount for seniors
+        }
+
+        total += cost;
+      }
+      receiptDiv.innerHTML = '<h2>Discounted Price:</h2>';
+      receiptDiv.innerHTML += '<br>Total after discount: ' + total.toFixed(2);
     }
   </script>
 </body>
 </html>
+
 <ALOASK-SEPARATE-EDITORS>html {
    background: linear-gradient(to right, dodgerblue 0%, deepskyblue 100%);
 }
